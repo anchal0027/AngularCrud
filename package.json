@@ -1,0 +1,14 @@
+{
+  "name": "angularcrud",
+  "version": "1.0.0",
+  "description": "simple angular application",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "anchal agarwal",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^1.0.3"
+  }
+}

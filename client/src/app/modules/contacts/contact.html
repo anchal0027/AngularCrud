@@ -1,0 +1,22 @@
+<h4  style="text-align:center">Hello come to contact page!</h4>
+<div class="container">
+  <h2>Contact Details</h2>            
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Phone</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let details of data">
+        <td>{{details.first_name}}</td>
+        <td>{{details.last_name}}</td>
+        <td>{{details.phone}}</td>
+         <td><button type="button" class="btn btn-primary">Edit</button></td>
+            <td><button type="button" class="btn btn-danger">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
