@@ -1,9 +1,10 @@
 import{Injectable} from '@angular/core';
 import{Http , Response} from '@angular/http';
+import {InterceptorService} from './interceptorservice';
 import 'rxjs/add/operator/map';
 @Injectable()
 export class ApiService{
-	constructor(private http:Http){
+	constructor(private http:InterceptorService){
 	}
 	getData(){
 		return this.http.get('http://localhost:3000/api/contacts').map(res=>res.json());

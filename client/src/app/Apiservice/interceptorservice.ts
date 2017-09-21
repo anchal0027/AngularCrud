@@ -1,37 +1,44 @@
-   // import {Http, RequestOptionsArgs, RequestOptions, Response, Request, ConnectionBackend} from "@angular/http";
-   //  import {Observable} from "rxjs/Observable";
-   //  import "rxjs/add/operator/catch"; 
-   //  import "rxjs/add/observable/throw";
-   //  import "rxjs/add/observable/empty";
-   //  import {Router} from "@angular/router";
+import {Injectable} from '@angular/core';
+import {Http, XHRBackend, RequestOptions, Request, RequestOptionsArgs, Response, Headers} from '@angular/http';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
 
-   //  export class HttpInterceptor extends Http {
-   //      constructor(backend: ConnectionBackend, defaultOptions: RequestOptions,    private _router: Router) {
-   //          super(backend, defaultOptions);
-   //      }
 
-   //      request(url: string | Request, options?: RequestOptionsArgs):      Observable<Response> {
-   //          return this.intercept(super.request(url, options));
-   //      }
+@Injectable()
+export class InterceptorService extends Http {
+  constructor (backend: XHRBackend, options: RequestOptions) {
+  let token = localStorage.getItem('token'); // your custom token getter function here
+    options.headers.set('Authorization', `Bearer ${token}`);
+    super(backend, options);
+  }
 
-   //      get(url: string, options?: RequestOptionsArgs): Observable<Response> {
-   //          return this.intercept(super.get(url,options));
-   //      }
+  request(url: string|Request, options?: RequestOptionsArgs): Observable<Response> {
+    let token = localStorage.getItem('token');
+    if (typeof url === 'string') { // meaning we have to add the token to the options, not in url
+      if (!options) {
+        // let's make option object
+        options = {headers: new Headers()};
+      }
+      options.headers.set('Authorization', `${token}`);
+    } else {
+    // we have to add the token to the url object
+      url.headers.set('Authorization', `${token}`);
+    }
+    console.log(">>>>>>>>>>>>>>...url")
+    return super.request(url, options).catch(this.catchAuthError(this));
+  }
 
-   //      post(url: string, body: string, options?: RequestOptionsArgs): Observable<Response> {
-   //          return this.intercept(super.post(url, body, options));
-   //      }
-
-   //      put(url: string, body: string, options?: RequestOptionsArgs): Observable<Response> {
-   //          return this.intercept(super.put(url, body, options));
-   //      }
-
-   //      delete(url: string, options?: RequestOptionsArgs): Observable<Response> {
-   //          return this.intercept(super.delete(url, options));
-   //      }
-
-   //      intercept(observable: Observable<Response>): Observable<Response> {
-   //          return observable.catch((err, source) => {
-   //          });
-   //      }
-   //  }
+  private catchAuthError (self: InterceptorService) {
+    // we have to pass HttpService's own instance here as `self`
+    return (res: Response) => {
+      console.log(res);
+      if (res.status === 401 || res.status === 403) {
+        // if not authenticated
+        console.log(res);
+      }
+      return Observable.throw(res);
+    };
+  }
+}
