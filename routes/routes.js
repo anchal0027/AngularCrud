@@ -1,6 +1,6 @@
 var express = require('express');
 const router = express.Router();
-const Contact = require('../models/collection');
+const Contact = require('../models/contact');
 const Register = require('../models/register');
 const validation = require('../validation/registervalidation');
 const jwt = require('jsonwebtoken');
@@ -77,7 +77,7 @@ router.post('/register', (req, res, next) => {
 				} else {
 					res.json({
 						success:true,
-						msg: 'contact created'
+						msg: 'Registration successful'
 					});
 				}
 			})
@@ -121,23 +121,61 @@ router.get('/contacts', (req, res, next) => {
 		res.json(contacts);
 	})
 });
-router.post('/addcontact', (req, res, next) => {
-	let newContact = new Contact({
-		first_name: req.body.first_name,
-		last_name: req.body.last_name,
-		phone: req.body.phone
-
+router.post('/addContact',(req,res,next)=>{
+	let newContact= new Contact({
+		first_name:req.body.firstname,
+		last_name:req.body.lastname,
+		city:req.body.city,
+		phone:req.body.phone
 	});
-	newContact.save((err, contact) => {
-		if (err) {
+	newContact.save((err,contact)=>{
+		if(err){
 			return next(err);
 			res.json({
-				msg: 'failed to register data!'
+				error:true,msg:"Failed to add Contact Details!"
 			});
-		} else {
-			res.json({
-				msg: 'Registration succesful!'
-			});
+		}
+		else{
+			res.json({success:true,msg:" Contact Details addes succesfully!"});
+		}
+
+	});
+});
+router.get('/getContactById/:id',(req,res,next)=>{
+	Contact.findOne({_id:req.params.id},(err,contact)=>{
+		if(err){
+			res.json(err);
+		}
+		else{
+			res.json(contact);
+		}
+	});
+});
+router.put('/updateContact/:id',(req,res,next)=>{
+	const data={
+		first_name:req.body.firstname,
+		last_name:req.body.lastname,
+		city:req.body.city,
+		phone:req.body.phone,
+	}
+	
+	Contact.update({_id:req.params.id},data,(err,result)=>{
+		if(err){
+			res.json(err);
+		}
+		else{
+			
+			res.json(result);
+		}
+	})
+})
+ router.delete('/contact/:id',(req,res,next)=>{
+	Contact.remove({_id:req.params.id},function(err,result){
+		if(err){
+		res.json(err);
+		}
+		else{
+			res.json(result);
 		}
 	});
 });

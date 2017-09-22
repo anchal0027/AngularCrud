@@ -6,9 +6,6 @@ import 'rxjs/add/operator/map';
 export class ApiService{
 	constructor(private http:InterceptorService){
 	}
-	getData(){
-		return this.http.get('http://localhost:3000/api/contacts').map(res=>res.json());
-	}
 	register(value:any){
 		return this.http.post('http://localhost:3000/api/register',value).map(res=>res.json());
 	}
@@ -17,5 +14,17 @@ export class ApiService{
 	}
 	contactData(){
 		return this.http.get('http://localhost:3000/api/contacts').map(res=>res.json());
+	}
+	addContact(data){
+		return this.http.post('http://localhost:3000/api/addContact',data).map(res=>res.json());
+	}
+	getDataById(id){
+		return this.http.get('http://localhost:3000/api/getContactById/'+id).map(res=>res.json());
+	}
+	updateContact(data,id){
+		return this.http.put('http://localhost:3000/api/updateContact/'+id,data).map(res=>res.json());
+	}
+	delete(id){
+		return this.http.delete('http://localhost:3000/api/contact/'+id).map(res=>res.json());
 	}
 }
