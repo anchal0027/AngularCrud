@@ -4,6 +4,7 @@ var mongoose = require("mongoose"); //used to connect mongodb
 var cors = require("cors"); //act as middleware known as cross origin resource
 var bodyparser = require("body-parser"); //to convert data to json.
 var path = require('path');
+mongoose.Promise = global.Promise;
 
 //2)to use express method assign it to some variable
 

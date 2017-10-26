@@ -1,22 +1,101 @@
 <h4  style="text-align:center">Hello come to contact page!</h4>
 <div class="container">
-  <h2>Contact Details</h2>            
-  <table class="table">
-    <thead>
+<h2>Contact Details</h2>
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal">Add Contact</button>       
+<table class="table">
+   <thead>
       <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Phone</th>
+         <th>Firstname</th>
+         <th>Lastname</th>
+         <th>City</th>
+         <th>Phone</th>
       </tr>
-    </thead>
-    <tbody>
+   </thead>
+   <tbody>
       <tr *ngFor="let details of data">
-        <td>{{details.first_name}}</td>
-        <td>{{details.last_name}}</td>
-        <td>{{details.phone}}</td>
-         <td><button type="button" class="btn btn-primary">Edit</button></td>
-            <td><button type="button" class="btn btn-danger">Delete</button></td>
+         <td>{{details.first_name}}</td>
+         <td>{{details.last_name}}</td>
+         <td>{{details.city}}</td>
+         <td>{{details.phone}}</td>
+         <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" (click)=getIdData(details._id)>Edit</button></td>
+         <td><button type="button" class="btn btn-danger" (click)="DeleteContact(details._id)">Delete</button></td>
       </tr>
-    </tbody>
-  </table>
+   </tbody>
+</table>
+<!-- model for add contact -->
+<div class="modal fade" id="addModal" role="dialog">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add Contact</h4>
+         </div>
+         <div class="modal-body">
+         <form [formGroup]="contactForm" (ngSubmit)="addContact(contactForm.value)">
+            <div class="form-group">
+               <label for="fname">First Name:</label>
+               <input type="text" class="form-control" [formControl]="contactForm.controls['firstname']">
+            </div>
+            <div class="form-group">
+               <label for="lname">Last Name:</label>
+               <input type="text" class="form-control" [formControl]="contactForm.controls['lastname']">
+            </div>
+            <div class="form-group">
+               <label for="city">City:</label>
+               <input type="text" class="form-control" [formControl]="contactForm.controls['city']">
+            </div>
+            <div class="form-group">
+               <label for="phone">Phone:</label>
+               <input type="number" class="form-control" [formControl]="contactForm.controls['phone']">
+            </div>
+            <div>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+             <button type="submit" class="btn btn-success">Save</button>
+         </div>
+            </form>
+
+         </div>
+
+      </div>
+   </div>
+</div>
+<!-- model for edit contact -->
+
+<div class="modal fade" id="editModal" role="dialog">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Edit Contact</h4>
+         </div>
+         <div class="modal-body">
+         <form [formGroup]="editForm" (ngSubmit)="updateContact(editForm.value,myData._id)">
+            <div class="form-group">
+               <label for="fname">First Name:</label>
+               <input *ngIf="editData" [(ngModel)] ="myData.first_name" type="text" class="form-control" [formControl]="editForm.controls['firstname']">
+
+            </div>
+            <div class="form-group">
+               <label for="lname">Last Name:</label>
+               <input *ngIf="editData"  [(ngModel)] ="myData.last_name" type="text" class="form-control" [formControl]="editForm.controls['lastname']">
+            </div>
+            <div class="form-group">
+               <label for="city">City:</label>
+               <input *ngIf="editData" [(ngModel)] ="myData.city"type="text" class="form-control" [formControl]="editForm.controls['city']">
+            </div>
+            <div class="form-group">
+               <label for="phone">Phone:</label>
+               <input *ngIf="editData"  [(ngModel)] ="myData.phone" type="number" class="form-control" [formControl]="editForm.controls['phone']">
+            </div>
+            <div>
+            <button  *ngIf="editData" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+             <button  *ngIf="editData" type="submit" class="btn btn-success">Update</button>
+         </div>
+            </form>
+
+         </div>
+
+      </div>
+   </div>
+</div>
 </div>
